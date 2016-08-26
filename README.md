@@ -12,3 +12,6 @@ Using this ["Secure CoreOS setup Tutorial"](https://www.digitalocean.com/communi
 * Add AWS support
 
 
+## Digital Ocean Setup
+
+Notice: You need to add ssh key to your Digital Ocean account. *FIRST* ssh key will be selected, if you have any preferences regarding this please create an issue. As I don't have other use cases in here. 
