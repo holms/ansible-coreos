@@ -1,0 +1,9 @@
+---
+
+- hosts: do
+  gather_facts: no
+  remote_user: core
+
+  roles:
+      - { role: coreos }
+
