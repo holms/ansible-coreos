@@ -1,0 +1,32 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  # $ curl -w "\n" 'https://discovery.etcd.io/new?size=3'
+  # https://discovery.etcd.io/6a28e078895c5ec737174db2419bb2f3
+
+  vars:
+    coreos:
+      etcd_token: "c9084c6b4f6d107aa004fdca1ee109f2"
+      do_token: "2a3c0ef8bd78fc24591631bcf4efeb8e860b7f8c5ec66df22e1d31445cda3ab1"
+      droplets:
+        - { name: kubernetes-master,     size: "512mb",   group: "kube-master" }
+        - { name: kubernetes-minion-1,   size: "512mb",   group: "kube-minions" }
+        - { name: kubernetes-minion-2,   size: "512mb",   group: "kube-minions" }
+
+  roles:
+    - { role: coreos }
+
+- hosts: do
+  gather_facts: no
+  become: yes
+  remote_user: core
+
+  vars:
+    coreos:
+        non_local: true
+
+  roles:
+      - { role: coreos }

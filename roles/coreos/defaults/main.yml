@@ -1,0 +1,5 @@
+---
+coreos_python_version: "2.7.10.12"
+coreos_python_dir: "ActivePython-{{ coreos_python_version }}-linux-x86_64"
+coreos_python_tar: "{{ coreos_python_dir }}.tar.gz"
+coreos_python_url: "http://downloads.activestate.com/ActivePython/releases/{{ coreos_python_version }}/{{ coreos_python_tar }}"

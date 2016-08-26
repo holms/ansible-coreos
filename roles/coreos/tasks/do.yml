@@ -1,0 +1,33 @@
+---
+
+- name: Digital Ocean | Get ssh key id's
+  uri:
+    url: "https://api.digitalocean.com/v2/account/keys"
+    HEADER_Authorization: Bearer {{ coreos.do_token }}
+    status_code: 200
+  register: ssh_keys
+
+- name: Digital Ocean | Create droplets
+  digital_ocean:
+      state: "{{ item.state | default('present') }}"
+      command: droplet
+      name: "{{ item.name }}"
+      private_networking: yes
+      user_data: "{{ lookup('template', 'cloud-config.yml.j2') }}"
+      size_id: "{{ item.size | default('1gb') }}"
+      image_id: "{{ item.image | default('coreos-stable') }}"
+      region_id: "NYC3"
+      ssh_key_ids: "{{ ssh_keys.json.ssh_keys[0].id }}"
+      unique_name: yes
+      api_token: "{{ coreos.do_token }}"
+  register: created_droplets
+  with_items: "{{ coreos.droplets }}"
+
+# item.0 key of the item, item.1 value of the item
+- name: Digital Ocean | Add hosts to inventory groups
+  add_host:
+    name: "{{ item.1.droplet.ip_address }}"
+    groups: "do,{{ coreos.droplets[item.0].group }}"
+    ansible_ssh_user: root
+  when: item.1.droplet is defined
+  with_indexed_items: "{{ created_droplets.results }}"
