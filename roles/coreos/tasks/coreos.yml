@@ -1,0 +1,17 @@
+---
+
+# Huge thanks to: https://github.com/ziozzang/python-on-coreos/
+- name: Provision CoreOS with Python
+  raw: "{{ item }}"
+  args:
+      executable: /bin/bash
+  with_items:
+      - "mkdir -p /opt/bin && cd /opt && wget {{ coreos_python_url }}"
+      - "tar -xzvf /opt/{{ coreos_python_tar }} && mv {{ coreos_python_dir }} /opt/apy"
+      - "cd /opt/apy && ./install.sh -I /opt/python/"
+      - "ln -s /opt/python/bin/easy_install /opt/bin/easy_install"
+      - "ln -s /opt/python/bin/pip /opt/bin/pip"
+      - "ln -s /opt/python/bin/python /opt/bin/python"
+      - "ln -s /opt/python/bin/virtualenv /opt/bin/virtualenv"
+      - "rm -rf /opt/{{ coreos_python_tar }}"
+  become: yes

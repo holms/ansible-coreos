@@ -28,6 +28,6 @@
   add_host:
     name: "{{ item.1.droplet.ip_address }}"
     groups: "do,{{ coreos.droplets[item.0].group }}"
-    ansible_ssh_user: root
+    ansible_ssh_user: core
   when: item.1.droplet is defined
   with_indexed_items: "{{ created_droplets.results }}"
